@@ -96,7 +96,6 @@ function increment(id) {
     search.item += 1;
   }
 
-
   localStorage.setItem("data", JSON.stringify(basket))
   updateCount(selectedItem.id);
 }

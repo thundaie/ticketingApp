@@ -1,5 +1,3 @@
-const { func } = require("joi");
-
 let basket = [] || JSON.parse(localStorage.getItem("data"));
 let label = document.getElementById("label");
 let shoppingCart = document.getElementById("shopping-cart");
@@ -127,10 +125,10 @@ function decrement(id) {
   
   function updateCount(id) {
     let search = basket.find((item) => item.id === id);
-  
     document.getElementById(id).innerHTML = search.item;
   
     calculation();
+    totalAmount()
   }
   
   function calculation() {
@@ -147,19 +145,37 @@ function decrement(id) {
     let selctedItem = id
     basket = basket.filter((y) => y.id !== selctedItem.id)
     generareCart()
+    totalAmount()
+    calculation()
     localStorage.setItem("data", JSON.stringify(basket))
     
   }
 
   function totalAmount() {
     if(basket.length !== 0){
+      let search = basket.map((x) => {
+        let amount = databaseMock.find((y) => y.id === x.id)
+        let total = amount.price * basket.item
+        return total
+      }).reduce((x,y) => x+y, 0)
 
+      label.innerHTML = `
+      <h2>$ ${search}</h2>
+      <button class="checkout">Check Out</button>
+      <button onclick="clearCart()" class="clearall">Clear Cart</button>
+      `
     }
     else return
 
   }
 
 
+
   function clearCart(){
+    basket = []
+    localStorage.setItem("data", basket)
+    generareCart()
+    calculation()
 
   }
+
